@@ -1,0 +1,18 @@
+name: send on merge
+
+on:
+    pull_request:
+        types: [closed]
+
+jobs:
+    send-on-merge:
+        runs-on: ubuntu-latest
+        if: github.event.pull_request.merged == true
+        steps:
+            - uses: 8BitJonny/gh-get-current-pr@3.0.0
+              id: PR
+              with:
+                sha: ${{ github.event.pull_request.head.sha }}
+
+            - run: |
+                echo "${{ toJSON(fromJSON(steps.PR.outputs.pr)) }}"
