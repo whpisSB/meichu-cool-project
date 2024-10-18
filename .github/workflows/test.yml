@@ -1,0 +1,14 @@
+name: send on merge
+
+on:
+    workflow_dispatch:
+        
+env: 
+    ENDPOINT: http://140.112.251.50:5000
+
+jobs:
+    ping:
+        runs-on: ubuntu-latest
+        steps:
+            - run: |
+                curl "$ENDPOINT/ping"
