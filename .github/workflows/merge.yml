@@ -6,6 +6,8 @@ on:
 
 jobs:
     send-on-merge:
+        permissions:
+            pull-requests: read
         runs-on: ubuntu-latest
         if: github.event.pull_request.merged == true
         steps:
