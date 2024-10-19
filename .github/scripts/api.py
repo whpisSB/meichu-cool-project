@@ -23,7 +23,10 @@ def get_diff_and_reviewers(token, repo, pr_num):
 
     diff = extract_diff(head_sha, base_sha)
 
-    reviewers = [r["login"] for r in json_res["requested_reviewers"]]
+    if len(json_res["requested_reviewers"]) == 0:
+        reviewers = ""
+    else:
+        reviewers = json_res["requested_reviewers"][0]['login']
 
     return diff, reviewers
 
