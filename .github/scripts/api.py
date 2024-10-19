@@ -95,7 +95,7 @@ def post_request(repo, endpoint, contributors, reviewers, summary):
         "Reviewers": reviewers,
     }
     print(json.dumps(body, indent=4))
-    res = requests.post(f"{endpoint}/api/pr", json=body)
+    res = requests.post(f"{endpoint}/pr", json=body)
     print(json.dumps(res.json(), indent=4))
     
     if res.status_code != 200:
