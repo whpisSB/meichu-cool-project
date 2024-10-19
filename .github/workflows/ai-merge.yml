@@ -40,7 +40,9 @@ jobs:
         run: |
           cd .github/scripts
           npm install
+          cd ../..
 
       - name: Sent summary
         run: |
-          python .github/scripts/api.py "$GH_TOKEN" ${{ github.repository }} ${{ github.event.pull_request.number }} "$ENDPOINT" "$GENMINI_API_TOKEN"
+          cd .github/scripts
+          ./api.py "$GH_TOKEN" ${{ github.repository }} ${{ github.event.pull_request.number }} "$ENDPOINT" "$GENMINI_API_TOKEN"
