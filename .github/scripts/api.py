@@ -85,14 +85,14 @@ def extract_diff(head, base):
 def post_request(repo, endpoint, contributors, reviewers, summary):
 
     body = {
-        "repository": repo,
-        'github_id': contributors["github_id"],
-        "commit_count": contributors["commit_count"],
-        "additions": contributors["stats"]["additions"],
-        "deletions": contributors["stats"]["deletions"],
-        "total": contributors["stats"]["total"],
-        "summary": summary,
-        "reviewers": reviewers,
+        "RepositoryID": repo,
+        'GithubID': contributors["github_id"],
+        "CommitCount": contributors["commit_count"],
+        "Additions": contributors["stats"]["additions"],
+        "Deletions": contributors["stats"]["deletions"],
+        "Total": contributors["stats"]["total"],
+        "Summary": summary,
+        "Reviewers": reviewers,
     }
     print(json.dumps(body, indent=4))
     res = requests.post(f"{endpoint}/api/v1/pr", json=body)
