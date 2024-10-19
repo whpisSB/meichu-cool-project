@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "markdown-flex-message": "^0.3.2"
+  },
+  "type": "module"
+}
