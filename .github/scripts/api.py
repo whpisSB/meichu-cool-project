@@ -91,7 +91,8 @@ def post_request(repo, endpoint, contributors, reviewers, summary):
         "reviewers": reviewers,
     }
     print(json.dumps(body, indent=4))
-    requests.post(f"{endpoint}/api/v1/pr", json=body)
+    res = requests.post(f"{endpoint}/api/v1/pr", json=body)
+    print(res.json)
 
 
 def main():
