@@ -26,7 +26,7 @@ def get_diff_and_reviewers(token, repo, pr_num):
     if len(json_res["requested_reviewers"]) == 0:
         reviewers = ""
     else:
-        reviewers = json_res["requested_reviewers"][0]['login']
+        reviewers = json_res["requested_reviewers"][0]["login"]
 
     return diff, reviewers
 
@@ -89,7 +89,7 @@ def post_request(repo, endpoint, contributors, reviewers, summary):
 
     body = {
         "RepositoryID": repo,
-        'GithubID': contributors["github_id"],
+        "GithubID": contributors["github_id"],
         "CommitCount": contributors["commit_count"],
         "Additions": contributors["stats"]["additions"],
         "Deletions": contributors["stats"]["deletions"],
@@ -100,9 +100,15 @@ def post_request(repo, endpoint, contributors, reviewers, summary):
     print(json.dumps(body, indent=4))
     res = requests.post(f"{endpoint}/pr", json=body)
     print(json.dumps(res.json(), indent=4))
-    
+
     if res.status_code != 200:
         exit(1)
+
+
+def to_flex_message(summary):
+    summary = summary.replace("'", "\\'")
+    res = subprocess.run(f"node get_flex_message.js '{summary}'", capture_output=True, shell=True)
+    return res.stdout.decode()
 
 
 def main():
@@ -110,8 +116,9 @@ def main():
 
     diff, reviewers = get_diff_and_reviewers(token, repo, pr_num)
     summary = get_review_summary(diff, genmini_api_key)
+    flex_message = to_flex_message(summary)
     contributors = get_contributors(token, repo, pr_num)
-    post_request(repo, endpoint, contributors, reviewers, summary)
+    post_request(repo, endpoint, contributors, reviewers, flex_message)
 
 
 if __name__ == "__main__":

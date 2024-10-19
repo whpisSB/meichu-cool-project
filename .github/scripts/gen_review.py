@@ -38,6 +38,7 @@ def get_summarize_prompt() -> str:
     template = """
     Can you summarize this for me?
     It would be good to stick to highlighting pressing issues and providing code suggestions to improve the pull request.
+    Please summarize the review in a few sentences, which no longer than 256 words.
     Here's what you need to summarize:
     """
     return template
@@ -174,6 +175,7 @@ def get_review_summary(
     review_comment = format_review_comment(
         summarized_review=summarized_review, chunked_reviews=chunked_reviews
     )
+    print(review_comment)
     return review_comment
     # # Create a comment to a pull request
     # create_a_comment_to_pull_request(
