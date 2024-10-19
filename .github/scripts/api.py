@@ -22,13 +22,14 @@ def get_diff_and_reviewers(token, repo, pr_num):
     base_sha = json_res["base"]["sha"]
 
     diff = extract_diff(head_sha, base_sha)
+    pr_url = json_res["html_url"]
 
     if len(json_res["requested_reviewers"]) == 0:
         reviewers = ""
     else:
         reviewers = json_res["requested_reviewers"][0]["login"]
 
-    return diff, reviewers
+    return pr_url, diff, reviewers
 
 
 def get_contributors(token, repo, pr_num):
@@ -85,17 +86,17 @@ def extract_diff(head, base):
     return res.stdout.decode()
 
 
-def post_request(repo, endpoint, contributors, reviewers, summary):
+def post_request(pr_url, endpoint, contributors, reviewers, summary):
 
     body = {
-        "RepositoryID": repo,
-        "GithubID": contributors["github_id"],
-        "CommitCount": contributors["commit_count"],
-        "Additions": contributors["stats"]["additions"],
-        "Deletions": contributors["stats"]["deletions"],
-        "Total": contributors["stats"]["total"],
-        "Summary": summary,
-        "Reviewers": reviewers,
+        "pr_url": pr_url,
+        "author_id": contributors["github_id"],
+        "commit_count": contributors["commit_count"],
+        "additions": contributors["stats"]["additions"],
+        "deletions": contributors["stats"]["deletions"],
+        "total": contributors["stats"]["total"],
+        "summary": summary,
+        "reviewer_id": reviewers,
     }
     print(json.dumps(body, indent=4))
     res = requests.post(f"{endpoint}/pr", json=body)
@@ -114,11 +115,11 @@ def to_flex_message(summary):
 def main():
     token, repo, pr_num, endpoint, genmini_api_key = sys.argv[1:6]
 
-    diff, reviewers = get_diff_and_reviewers(token, repo, pr_num)
+    pr_url, diff, reviewers = get_diff_and_reviewers(token, repo, pr_num)
     summary = get_review_summary(diff, genmini_api_key)
     flex_message = to_flex_message(summary)
     contributors = get_contributors(token, repo, pr_num)
-    post_request(repo, endpoint, contributors, reviewers, flex_message)
+    post_request(pr_url, endpoint, contributors, reviewers, flex_message)
 
 
 if __name__ == "__main__":
