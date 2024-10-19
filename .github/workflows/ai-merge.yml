@@ -7,7 +7,7 @@ on:
 env: 
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ENDPOINT: ${{ secrets.ENDPOINT}}
-  GENMINI_API_TOKNE: ${{ secrets.GENMINI_API_TOKEN }}
+  GENMINI_API_TOKEN: ${{ secrets.GENMINI_API_TOKEN }}
 
 jobs:
   ai-merge:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-          
+
       - name: Install dependencies
         run: |
           cd .github/scripts
