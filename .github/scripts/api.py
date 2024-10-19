@@ -73,7 +73,7 @@ def get_contributors(token, repo, pr_num):
             "stats": commit_stat[author],
         }
         for author in commit_stat.keys()
-    ]
+    ][0]
 
 
 def extract_diff(head, base):
@@ -85,13 +85,18 @@ def extract_diff(head, base):
 def post_request(repo, endpoint, contributors, reviewers, summary):
 
     body = {
-        "repository": repo,
-        "contributors": contributors,
-        "summary": summary,
-        "reviewers": reviewers,
+        "RepositoryID": repo,
+        'GithubID': contributors["github_id"],
+        "CommitCount": contributors["commit_count"],
+        "Additions": contributors["stats"]["additions"],
+        "Deletions": contributors["stats"]["deletions"],
+        "Total": contributors["stats"]["total"],
+        "Summary": summary,
+        "Reviewers": reviewers,
     }
     print(json.dumps(body, indent=4))
-    requests.post(f"{endpoint}/api/v1/pr", json=body)
+    res = requests.post(f"{endpoint}/api/v1/pr", json=body)
+    print(res.json())
 
 
 def main():
