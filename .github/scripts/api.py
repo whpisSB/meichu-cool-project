@@ -92,7 +92,7 @@ def post_request(repo, endpoint, contributors, reviewers, summary):
     }
     print(json.dumps(body, indent=4))
     res = requests.post(f"{endpoint}/api/v1/pr", json=body)
-    print(res.json)
+    print(res.json())
 
 
 def main():
