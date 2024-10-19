@@ -1,0 +1,33 @@
+name: ai-merge
+
+on:
+  pull_request:
+    types: [closed]
+
+env: 
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  ENDPOINT: ${{ secrets.ENDPOINT}}
+  GENMINI_API_TOKNE: ${{ secrets.GENMINI_API_TOKEN }}
+
+jobs:
+  ai-merge:
+    permissions:
+      read-all
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          
+      - name: Install dependencies
+        run: |
+          cd .github/scripts
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Sent summary
+        run: |
+          python .github/scripts/api.py "$GH_TOKEN" ${{ github.repository }} ${{ github.event.pull_request.number }} "$ENDPOINT" "$GENMINI_API_TOKEN"

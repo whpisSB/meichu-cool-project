@@ -1,14 +1,14 @@
 name: health check
 
 on:
-    workflow_dispatch:
+  workflow_dispatch:
 
 env: 
-    ENDPOINT: ${{ secrets.ENDPOINT }}
+  ENDPOINT: ${{ secrets.ENDPOINT }}
 
 jobs:
-    ping:
-        runs-on: ubuntu-latest
-        steps:
-            - run: |
-                curl "$ENDPOINT/ping"
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl "$ENDPOINT/ping"
